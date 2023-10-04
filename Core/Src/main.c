@@ -45,7 +45,7 @@ TIM_HandleTypeDef htim2;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-
+uint8_t ch;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,7 +62,11 @@ static void MX_USART1_UART_Init(void);
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   /* Prevent unused argument(s) compilation warning */
- 
+ if(huart->Instance == huart1.Instance)
+ {
+		HAL_UART_Receive_IT(&huart1,&ch,1);
+		HAL_UART_Transmit(&huart1,&ch,1,1000);
+ }
 }
 /* USER CODE END 0 */
 
@@ -96,6 +100,8 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_USART1_UART_Init();
+	HAL_UART_Transmit(&huart1,(uint8_t *)"HELLO WORLD\r\n",13,1000);
+	HAL_UART_Receive_IT(&huart1,&ch,1);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -107,8 +113,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_UART_Transmit(&huart1,"Hello",sizeof("Hello"),10);
-		HAL_Delay(1000);
+//		HAL_UART_Transmit(&huart1,"Hello",sizeof("Hello"),10);
+//		HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
