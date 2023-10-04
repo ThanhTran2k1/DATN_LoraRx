@@ -6,6 +6,7 @@
 "lora_rx\stm32f1xx_hal_gpio_ex.o"
 "lora_rx\stm32f1xx_hal_tim.o"
 "lora_rx\stm32f1xx_hal_tim_ex.o"
+"lora_rx\stm32f1xx_hal_uart.o"
 "lora_rx\stm32f1xx_hal.o"
 "lora_rx\stm32f1xx_hal_rcc.o"
 "lora_rx\stm32f1xx_hal_rcc_ex.o"
@@ -16,7 +17,6 @@
 "lora_rx\stm32f1xx_hal_flash.o"
 "lora_rx\stm32f1xx_hal_flash_ex.o"
 "lora_rx\stm32f1xx_hal_exti.o"
-"lora_rx\stm32f1xx_hal_uart.o"
 "lora_rx\system_stm32f1xx.o"
 --strict --scatter "LoRa_Rx\LoRa_Rx.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
