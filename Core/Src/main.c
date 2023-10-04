@@ -45,7 +45,9 @@ TIM_HandleTypeDef htim2;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-uint8_t ch;
+uint8_t Rx_Data;
+uint8_t Rx_Buff[20];
+uint8_t data[25] = "da nhan duoc ban tin\r\n";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,8 +66,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   /* Prevent unused argument(s) compilation warning */
  if(huart->Instance == huart1.Instance)
  {
-		HAL_UART_Receive_IT(&huart1,&ch,1);
-		HAL_UART_Transmit(&huart1,&ch,1,1000);
+		HAL_UART_Receive_IT(&huart1,&Rx_Data,1);// thay doi tham so cuoi cung de biet bao nhieu ky tu de xay ra ngat
+		HAL_UART_Transmit(&huart1,&data,sizeof(data),1000);
  }
 }
 /* USER CODE END 0 */
@@ -101,7 +103,7 @@ int main(void)
   MX_TIM2_Init();
   MX_USART1_UART_Init();
 	HAL_UART_Transmit(&huart1,(uint8_t *)"HELLO WORLD\r\n",13,1000);
-	HAL_UART_Receive_IT(&huart1,&ch,1);
+	HAL_UART_Receive_IT(&huart1,&Rx_Data,2);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
