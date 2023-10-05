@@ -21,10 +21,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-uint8_t Rx_Data;
+uint16_t Rx_Data;
 uint8_t Rx_Buff[128];
 uint8_t Tx_Buff[20] = "Hello World!\n";
 uint8_t Rx_Idx;
+uint8_t data[10] = "12321";
 int Tx_Flag = 0;
 
 /* USER CODE END Includes */
@@ -46,6 +47,7 @@ int Tx_Flag = 0;
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
+DMA_HandleTypeDef hdma_usart1_rx;
 
 /* USER CODE BEGIN PV */
 
@@ -54,6 +56,7 @@ UART_HandleTypeDef huart1;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -63,14 +66,10 @@ static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN 0 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	for(int i=0;i<sizeof(Rx_Data);i++){
-		Rx_Buff[i] = (uint8_t)Rx_Data[i];
+	if(huart->Instance == USART1)
+	{
+		HAL_UART_Transmit(&huart1,&Tx_Buff,14,1000);
 	}
-  /* Prevent unused argument(s) compilation warning */
-	HAL_UART_Transmit(&huart1,&Rx_Buff,sizeof(Rx_Buff),100);
-	HAL_UART_Receive_IT(&huart1,&Rx_Data,1);
-//		HAL_UART_Receive_IT(&huart1,&Rx_Data,1);// thay doi tham so cuoi cung de biet bao nhieu ky tu de xay ra ngat
-		
  }
 
 /* USER CODE END 0 */
@@ -103,10 +102,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-	HAL_UART_Transmit(&huart1,Tx_Buff,sizeof(Tx_Buff),100);
-	HAL_UART_Receive_IT(&huart1,&Rx_Data,1);
+
+	HAL_UART_Receive_DMA(&huart1,&Rx_Data,4);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -116,7 +116,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
+//	if(Rx_Data != 0)
+//	{
+//		HAL_UART_Transmit(&huart1,&Rx_Data,1,1000);
+//		Rx_Data = 0;
+//	}
   }
   /* USER CODE END 3 */
 }
@@ -187,6 +191,22 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 
 }
 
