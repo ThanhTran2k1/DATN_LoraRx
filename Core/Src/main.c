@@ -22,10 +22,11 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 uint8_t Rx_Data;
-uint8_t Rx_Buff[20];
+uint8_t Rx_Buff[128];
 uint8_t Tx_Buff[20] = "Hello World!\n";
 uint8_t Rx_Idx;
-uint16_t Tx_Flag = 0;
+int Tx_Flag = 0;
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,23 +63,16 @@ static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN 0 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+	for(int i=0;i<sizeof(Rx_Data);i++){
+		Rx_Buff[i] = (uint8_t)Rx_Data[i];
+	}
   /* Prevent unused argument(s) compilation warning */
- if(huart->Instance == huart1.Instance)
- {
-	 if(Rx_Data != 13)
-	 {
-		Rx_Buff[Rx_Idx++] = Rx_Data;
-	 }
-	 else if(Rx_Data == 13)
-	 {
-		Rx_Idx = 0;
-		Tx_Flag = 1; 
-	 }
-	 HAL_UART_Receive_IT(&huart1,&Rx_Data,1);
+	HAL_UART_Transmit(&huart1,&Rx_Buff,sizeof(Rx_Buff),100);
+	HAL_UART_Receive_IT(&huart1,&Rx_Data,1);
 //		HAL_UART_Receive_IT(&huart1,&Rx_Data,1);// thay doi tham so cuoi cung de biet bao nhieu ky tu de xay ra ngat
-//		HAL_UART_Transmit(&huart1,&data,sizeof(data),1000);
+		
  }
-}
+
 /* USER CODE END 0 */
 
 /**
@@ -111,7 +105,8 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+	HAL_UART_Transmit(&huart1,Tx_Buff,sizeof(Tx_Buff),100);
+	HAL_UART_Receive_IT(&huart1,&Rx_Data,1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -121,17 +116,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		if(Tx_Flag)
-		{
-			for(int i = 0;i<20;i++)
-			{
-				Tx_Buff[i] = Rx_Buff[i];
-			}
-			HAL_UART_Transmit(&huart1,Tx_Buff,sizeof(Tx_Buff),100);
-			Tx_Flag = 0;
-		}
-//		HAL_UART_Transmit(&huart1,"Hello",sizeof("Hello"),10);
-//		HAL_Delay(1000);
+
   }
   /* USER CODE END 3 */
 }
