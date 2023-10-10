@@ -1,5 +1,4 @@
-lora_rx/stm32f1xx_hal_tim_ex.o: \
-  ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c \
+lora_rx/spi.o: ..\Core\Src\spi.c ..\Core\Inc\spi.h ..\Core\Inc\main.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h \
   ..\Core\Inc\stm32f1xx_hal_conf.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h \
