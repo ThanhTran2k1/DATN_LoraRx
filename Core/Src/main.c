@@ -145,16 +145,16 @@ LoRa_startReceiving(&myLoRa);
   while (1)
   {
     /* USER CODE END WHILE */
-		
+
     /* USER CODE BEGIN 3 */
-		RSSI_Lora =  LoRa_getRSSI(RxBuffer);
-		
-		
-		HAL_Delay(500);
+//		RSSI_Lora =  LoRa_getRSSI(&myLoRa);
+//		
+//		
+//		HAL_Delay(500);
 //		if(RSSI_Lora !=0){
-			HAL_UART_Transmit(&huart1,RxBuffer,12,500);
-			HAL_UART_Transmit(&huart1, (uint8_t*)RSSI_Lora, 200, 200);
-			HAL_Delay(100);
+//			HAL_UART_Transmit(&huart1,RxBuffer,12,500);
+//			HAL_UART_Transmit(&huart1, (uint8_t*)RSSI_Lora, 200, 200);
+//			HAL_Delay(100);
 //		}
 //		HAL_UART_Transmit(&huart1,(uint8_t*)RSSI_Lora,12,500);
 //		HAL_Delay(100);
@@ -210,8 +210,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if(GPIO_Pin == DIO0_Pin){
 		
 		LoRa_receive(&myLoRa,RxBuffer,128);
-//		RSSI_Lora = LoRa_getRSSI(RxBuffer);
-//		HAL_UART_Transmit(&huart1,RxBuffer,12,500);
+		RSSI_Lora = LoRa_getRSSI(&myLoRa);
+		HAL_UART_Transmit(&huart1,RxBuffer,12,500);
 	}
 }
 /* USER CODE END 4 */
